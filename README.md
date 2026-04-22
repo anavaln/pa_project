@@ -13,8 +13,11 @@ Este projeto foi realizado no âmbito da unidade curricular de **Programação A
 Nesta primeira fase, a biblioteca foca-se no modelo em memória e na serialização básica:
 
 **Modelo de Objetos In-Memory**: Implementação de uma interface 'JsonValue', que é a base para todos os objetos Json. Esta interface é hierarquizada para as classes 'JsonObject' (mapas - objetos com um par de chave e valor), 'JsonArray' (objetos para coleções - listas, sets) e 'JsonPrimitive' (obtevos para os tipos primitivos - String, Inteiro e Boolean).
+
 **Geração via Reflexão**: Capacidade de gerar objetos JSON automaticamente a partir de qualquer instância de classe em memória, extraindo as suas propriedades sem intervenção do utilizador.
+
 **Identificação de Tipos**: Inclusão automática da propriedade `$type` em cada objeto JSON para indicar a classe de origem.
+
 **Manipulação Dinâmica**: API completa para leitura, escrita, adição e remoção de propriedades em tempo de execução.
 
 
