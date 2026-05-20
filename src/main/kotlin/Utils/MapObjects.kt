@@ -2,11 +2,11 @@ package Utils
 
 import Models.JsonObject
 import Models.JsonPrimitive
-import java.util.UUID
 
 class MapObjects {
 
     private val map = mutableMapOf<Any, String>()
+    private var counter = 1
 
     fun contains(obj: Any): Boolean {
         return map.containsKey(obj)
@@ -16,10 +16,6 @@ class MapObjects {
         val id = generateId()
         map[obj] = id
         return id
-    }
-
-    fun getId(obj: Any): String? {
-        return map[obj]
     }
 
     fun createReference(obj: Any): JsonObject {
@@ -32,6 +28,10 @@ class MapObjects {
     }
 
     private fun generateId(): String {
-        return UUID.randomUUID().toString()
+        return counter++.toString()
+    }
+
+    override fun toString(): String {
+        return map.toString()
     }
 }
