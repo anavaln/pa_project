@@ -2,7 +2,6 @@ import Utils.MapObjects
 import Models.*
 import pt.iscte.pa.projson.annotations.*
 import kotlin.reflect.full.*
-import kotlin.reflect.jvm.isAccessible
 
 class ProJson {
     private val mapObjects = MapObjects()
