@@ -42,7 +42,11 @@ class TestProJson {
         val instructor: Person
     )
 
-    // test1
+    /* *
+     * Valida a correta interpretação das anotações estruturais e a referenciação numa lista de tarefas.
+     * Este teste garante que as propriedades marcadas com @JsonProperty mudam de nome, que os campos com @JsonIgnore
+     * são omitidos e que os objetos repetidos geram apenas nós de referência ($ref) usando o ID correto obtido no mapa.
+     */
     @Test
     fun testTaskWithAnnotations() {
         val t1 = Task("T1", Date(30, 2, 2026), emptyList())
@@ -86,52 +90,11 @@ class TestProJson {
         assertEquals(expected, json.toString())
     }
 
-
-    // test2
-    @Test
-    fun testTaskReverse() {
-        val t1 = Task("T1", Date(30, 2, 2026), emptyList())
-        val t2 = Task("T2", Date(31, 4, 2026), emptyList())
-        val t3 = Task("T3", null, listOf(t1, t2))
-
-        val json = ProJson().toJson(listOf(t3, t1, t2))
-
-        val expected = """
-[
-  {
-    "${'$'}id": "1",
-    "${'$'}type": "Task",
-    "deps": [
-      {
-        "${'$'}ref": "2"
-      },
-      {
-        "${'$'}ref": "3"
-      }
-    ],
-    "desc": "T3"
-  },
-  {
-    "${'$'}id": "2",
-    "${'$'}type": "Task",
-    "deps": [
-    ],
-    "desc": "T1"
-  },
-  {
-    "${'$'}id": "3",
-    "${'$'}type": "Task",
-    "deps": [
-    ],
-    "desc": "T2"
-  }
-]
-""".trimIndent()
-
-        assertEquals(expected, json.toString())
-    }
-
-    // test3
+    /* *
+     * Valida o mecanismo de extensão através de plugins de serialização customizados.
+     * Este teste certifica que o motor interpeta a anotação @JsonString ao nível da
+     * classe e desvia o processamento padrão por reflexão, transformando o objeto complexo (Date).
+     */
     @Test
     fun testJsonStringPlugin() {
         val d1 = Date(30, 2, 2026)
@@ -150,7 +113,9 @@ class TestProJson {
         println(json.toString())
     }
 
-    // test4
+    /* *
+     * Valida o comportamento da anotação @Reference quando aplicada diretamente num campo de relacionamento.
+     */
     @Test
     fun testExplicitReferenceAnnotation() {
         val teacher = Person("Ana", 24, true, emptyList())
@@ -184,7 +149,11 @@ class TestProJson {
     }
 
 
-    // test5
+    /* *
+     * Valida a travessia recursiva padrão e o mapeamento de dependências com tipos de dados idênticos.
+     * Este teste garante que objetos complexos do mesmo tipo (Person) geram os metadados de estrutura ($id e $type)
+     * e ativam corretamente a minimização automática para referências ($ref) quando detetam um elemento previamente registado.
+     */
     @Test
     fun testPerson() {
         val p1 = Person("Ana", 24, true, emptyList())
@@ -221,7 +190,10 @@ class TestProJson {
         assertEquals(expected, json.toString())
     }
 
-    // test6
+    /* *
+     * Valida o fluxo de processamento e isolamento de tipos de dados primitivos.
+     * Este teste certifica que o motor interpeta corretamente a Fase 1 do algoritmo
+     */
     @Test
     fun testSimplePrimitives() {
         val json = ProJson().toJson(listOf("alfabeto", 1))

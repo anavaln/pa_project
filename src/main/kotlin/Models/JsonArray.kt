@@ -1,5 +1,9 @@
 package Models
 
+/**
+ * Representa uma lista ordenada de valores JSON (`[]`) que serve ara armazenar e formatar coleções de dados de forma hierárquica.
+ */
+
 class JsonArray : JsonValue {
     val elements = mutableListOf<JsonValue>()
 

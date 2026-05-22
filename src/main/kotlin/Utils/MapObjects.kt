@@ -3,6 +3,10 @@ package Utils
 import Models.JsonObject
 import Models.JsonPrimitive
 
+/**
+ * Atua como um mapa de objetos, sendo responsável por mapear instâncias na memória para identificadores numéricos sequenciais únicos e criar nós de referência (`$ref`).
+ */
+
 class MapObjects {
 
     private val map = mutableMapOf<Any, String>()

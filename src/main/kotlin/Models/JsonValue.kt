@@ -1,5 +1,9 @@
 package Models
 
+/**
+ * Interface base que define a formatação de dados e fornece a lógica partilhada de indentação para converter nós e coleções em texto estruturado.
+ */
+
 interface JsonValue {
     override fun toString(): String
 

@@ -1,6 +1,8 @@
 package Models
 
-import kotlin.collections.iterator
+/**
+ * Representa um objeto estruturado JSON (`{}`) que mapeia chaves de texto para valores complexos ou primitivos e gera a sua respetiva formatação indentada.
+ */
 
 class JsonObject : JsonValue {
     val properties = mutableMapOf<String, JsonValue>()

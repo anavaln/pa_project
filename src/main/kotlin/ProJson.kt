@@ -3,10 +3,19 @@ import Models.*
 import pt.iscte.pa.projson.annotations.*
 import kotlin.reflect.full.*
 
+/* *
+ * Esta classe representa o motor de conversão central da biblioteca, sendo responsável por
+ * gerir o ciclo de vida da serialização através do mapeamento de referências e reflexão.
+ */
+
 class ProJson {
     private val mapObjects = MapObjects()
 
     fun toJson(obj: Any?): JsonValue {
+        /* * Fase 1: Tratamento dos casos primitivos e estruturas de dados
+        * Esta fase limpa de imediato os tipos de dados.
+        * Também processa as coleções estruturais iteráveis e mapas recursivamente.
+        */
         if (obj == null) return JsonPrimitive(null)
 
         if (obj is Number || obj is Boolean || obj is String) {
@@ -27,7 +36,13 @@ class ProJson {
             return jsonObject
         }
 
-        // Reflection
+        /* * Fase 2: Reflexão
+         * Alcançada apenas por objetos estruturais complexos de classes do utilizador.
+         * Utiliza a API 'kotlin.reflect' para inspecionar o objeto em tempo de execução.
+         * Valida-se se o objeto já foi registado antes, colapsa-o num
+         * nó de referência ($ref); caso contrário, atribui-lhe um novo ID único,
+         * inicializa o JsonObject e injeta $id e $type.
+         */
         val kClass = obj::class
 
         if (mapObjects.contains(obj)) {
@@ -39,6 +54,15 @@ class ProJson {
         val jsonObject = JsonObject()
         jsonObject.setProperty("\$id", JsonPrimitive(currentId))
         jsonObject.setProperty("\$type", JsonPrimitive(kClass.simpleName ?: "Unknown"))
+
+        /* * Fase 3: Anotações
+         * O motor itera sobre todos os campos declarados na classe do objeto,
+         * ordenados alfabeticamente.
+         * Durante o ciclo, lê os valores de cada propriedade e aplica os modificadores
+         * de comportamento (@JsonIgnore, @JsonProperty @JsonString e @Reference),
+         * decidindo se a propriedade avança, se modifica o nome da chave, se escolhe uma
+         * estrutura serializada customizada ou se é forçada a usar a referência.
+         */
 
         // anotação do @JsonString
         val jsonStringAnno = kClass.findAnnotation<JsonString>()
